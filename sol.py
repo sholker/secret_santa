@@ -7,13 +7,18 @@ from employee import Employee
 
 def load_data(path: str) -> list:
     employee_lst = []
-    with open(path,'r') as f:
-        json_data = json.load(f)
+    try:
+        with open(path,'r') as f:
+            json_data = json.load(f)
 
-    for e in json_data:
+        for e in json_data:
 
-        employee_lst.append(Employee(**e))
-    return employee_lst
+            employee_lst.append(Employee(**e))
+        return employee_lst
+    except FileNotFoundError:
+        print(f"File {path} not found")
+        exit(1)
+
 
 
 def remove_duplicates(employee_lst: list) -> list:
