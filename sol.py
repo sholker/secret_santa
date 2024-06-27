@@ -1,26 +1,8 @@
 import json
 import random
 from multiprocessing import Pool, cpu_count
+from employee import Employee
 
-class Employee():
-    '''
-	{
-		"department": "R&D",
-		"name": "Nikolas Porter",
-		"age": 46
-	},'''
-
-    def __init__(self, department: str, name: str, age: int):
-        self.department = department
-        self.name = name
-        self.age = age
-
-    def get_name(self):
-        return self.name
-
-
-    def __str__(self):
-        return f"{self.department}, {self.name},{self.age}"
 
 
 def load_data(path: str) -> list:
@@ -33,7 +15,17 @@ def load_data(path: str) -> list:
         employee_lst.append(Employee(**e))
     return employee_lst
 
-result_couple = tuple()
+
+def remove_duplicates(employee_lst: list) -> list:
+    seen = set() # employees are I see before
+    unique_employee_lst = []
+
+    for e in employee_lst:
+        if e not in seen:
+            seen.add(e)
+            unique_employee_lst.append(e)
+
+    return unique_employee_lst
 
 
 def create_couples(employee_lst: list) -> tuple:
@@ -54,8 +46,9 @@ def create_couples(employee_lst: list) -> tuple:
 
 
 if __name__ =="__main__":
-    employee_lst = load_data("data.json")
-    result = create_couples(employee_lst)
+
+    result = create_couples(remove_duplicates(load_data("data.json")))
+    # print(len(result))
 
     print(result)
 
